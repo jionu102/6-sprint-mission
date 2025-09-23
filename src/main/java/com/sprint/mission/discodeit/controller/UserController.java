@@ -9,6 +9,10 @@ import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.UserStatusService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Encoding;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,6 +37,9 @@ public class UserController {
   private final UserService userService;
   private final UserStatusService userStatusService;
 
+  @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(
+          encoding = @Encoding(name = "userCreateRequest", contentType = MediaType.APPLICATION_JSON_VALUE)
+  ))
   @RequestMapping(
       consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
       method = RequestMethod.POST
@@ -49,6 +56,9 @@ public class UserController {
         .body(createdUser);
   }
 
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(
+            encoding = @Encoding(name = "userUpdateRequest", contentType = MediaType.APPLICATION_JSON_VALUE)
+    ))
   @RequestMapping(
       path = "/{userId}",
       consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},

@@ -5,6 +5,8 @@ import com.sprint.mission.discodeit.dto.request.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.request.MessageUpdateRequest;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.MessageService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Encoding;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Request;
@@ -30,6 +32,9 @@ public class MessageController {
 
   private final MessageService messageService;
 
+  @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(
+          encoding = @Encoding(name = "messageCreateRequest", contentType = MediaType.APPLICATION_JSON_VALUE)
+  ))
   @RequestMapping(
       consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
       method = RequestMethod.POST
