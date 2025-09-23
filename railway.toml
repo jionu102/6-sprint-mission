@@ -1,8 +1,0 @@
-[build]
-builder = "RAILPACK"
-
-[build.railpackConfig]
-providers = ["java"]
-
-[build.railpackConfig.variables]
-JAVA_VERSION = "17"
