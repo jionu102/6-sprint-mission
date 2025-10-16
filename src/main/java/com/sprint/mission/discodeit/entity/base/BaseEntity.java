@@ -19,7 +19,7 @@ public abstract class BaseEntity {
     private UUID id;
 
     @CreatedDate
-    private Instant created_at;
+    private Instant createdAt;
 
     //JPA 생명주기 콜백 어노테이션
     @PrePersist

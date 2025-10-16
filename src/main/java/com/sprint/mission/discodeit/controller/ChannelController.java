@@ -26,28 +26,28 @@ public class ChannelController {
   private final ChannelService channelService;
 
   @RequestMapping(path = "/public", method = RequestMethod.POST)
-  public ResponseEntity<Channel> create(@RequestBody PublicChannelCreateRequest request) {
-    Channel createdChannel = channelService.create(request);
+  public ResponseEntity<ChannelDto> create(@RequestBody PublicChannelCreateRequest request) {
+    ChannelDto createdChannel = channelService.create(request);
     return ResponseEntity
         .status(HttpStatus.CREATED)
         .body(createdChannel);
   }
 
   @RequestMapping(path = "/private", method = RequestMethod.POST)
-  public ResponseEntity<Channel> create(@RequestBody PrivateChannelCreateRequest request) {
-    Channel createdChannel = channelService.create(request);
+  public ResponseEntity<ChannelDto> create(@RequestBody PrivateChannelCreateRequest request) {
+    ChannelDto createdChannel = channelService.create(request);
     return ResponseEntity
         .status(HttpStatus.CREATED)
         .body(createdChannel);
   }
 
   @RequestMapping(path = "/{channelId}", method = RequestMethod.PATCH)
-  public ResponseEntity<Channel> update(@PathVariable("channelId") UUID channelId,
+  public ResponseEntity<ChannelDto> update(@PathVariable("channelId") UUID channelId,
       @RequestBody PublicChannelUpdateRequest request) {
-    Channel udpatedChannel = channelService.update(channelId, request);
+    ChannelDto updatedChannel = channelService.update(channelId, request);
     return ResponseEntity
         .status(HttpStatus.OK)
-        .body(udpatedChannel);
+        .body(updatedChannel);
   }
 
   @RequestMapping(path = "/{channelId}", method = RequestMethod.DELETE)
