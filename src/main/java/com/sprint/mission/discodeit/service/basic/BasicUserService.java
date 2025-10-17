@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
@@ -85,8 +86,8 @@ public class BasicUserService implements UserService {
     }
 
     @Override
-    public PageResponse<UserDto> findAll(Pageable pageable) {
-        return pageResponseMapper.fromPage(userRepository.findAll(pageable).map(userMapper::toDto));
+    public List<UserDto> findAll() {
+        return userRepository.findAll().stream().map(userMapper::toDto).toList();
     }
 
     @Transactional
@@ -115,7 +116,10 @@ public class BasicUserService implements UserService {
                     byte[] bytes = profileRequest.bytes();
                     BinaryContent binaryContent = new BinaryContent(fileName, (long) bytes.length,
                             contentType);
-                    return binaryContentRepository.save(binaryContent);
+                    BinaryContent createdContent = binaryContentRepository.save(binaryContent);
+                    binaryContentStorage.put(createdContent.getId(), bytes);
+
+                    return createdContent;
                 })
                 .orElse(null);
 

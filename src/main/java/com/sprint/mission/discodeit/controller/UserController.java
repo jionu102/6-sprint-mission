@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.data.UserDto;
+import com.sprint.mission.discodeit.dto.data.UserStatusDto;
 import com.sprint.mission.discodeit.dto.request.BinaryContentCreateRequest;
 import com.sprint.mission.discodeit.dto.request.UserCreateRequest;
 import com.sprint.mission.discodeit.dto.request.UserStatusUpdateRequest;
@@ -85,14 +86,14 @@ public class UserController {
   }
 
   @RequestMapping(method = RequestMethod.GET)
-  public ResponseEntity<List<UserDto>> findAll(Pageable pageable) {
-    return ResponseEntity.ok(userService.findAll(pageable).getContent());
+  public ResponseEntity<List<UserDto>> findAll() {
+    return ResponseEntity.ok(userService.findAll());
   }
 
   @RequestMapping(path = "/{userId}/userStatus", method = RequestMethod.PATCH)
-  public ResponseEntity<UserStatus> updateUserStatusByUserId(@PathVariable("userId") UUID userId,
-      @RequestBody UserStatusUpdateRequest request) {
-    UserStatus updatedUserStatus = userStatusService.updateByUserId(userId, request);
+  public ResponseEntity<UserStatusDto> updateUserStatusByUserId(@PathVariable("userId") UUID userId,
+                                                                @RequestBody UserStatusUpdateRequest request) {
+    UserStatusDto updatedUserStatus = userStatusService.updateByUserId(userId, request);
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(updatedUserStatus);

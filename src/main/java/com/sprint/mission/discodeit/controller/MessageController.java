@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -86,7 +87,7 @@ public class MessageController {
 
   @RequestMapping(method =  RequestMethod.GET)
   public ResponseEntity<PageResponse<MessageDto>> findAllByChannelId(
-      @RequestParam("channelId") UUID channelId, Pageable pageable) {
-    return ResponseEntity.ok(messageService.findAllByChannelId(channelId, pageable));
+          @RequestParam("channelId") UUID channelId, @RequestParam(name = "cursor", required = false)LocalDateTime cursor, Pageable pageable) {
+    return ResponseEntity.ok(messageService.findAllByChannelId(channelId, cursor, pageable));
   }
 }

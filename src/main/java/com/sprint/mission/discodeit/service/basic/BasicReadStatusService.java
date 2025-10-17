@@ -12,6 +12,7 @@ import com.sprint.mission.discodeit.repository.ReadStatusRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.ReadStatusService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class BasicReadStatusService implements ReadStatusService {
 
     private final ReadStatusRepository readStatusRepository;
@@ -33,6 +35,7 @@ public class BasicReadStatusService implements ReadStatusService {
     @Transactional
     @Override
     public ReadStatusDto create(ReadStatusCreateRequest request) {
+        log.info("🔴 create() 호출: userId={}, channelId={}", request.userId(), request.channelId());
         UUID userId = request.userId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User with id " + userId + " does not exist"));

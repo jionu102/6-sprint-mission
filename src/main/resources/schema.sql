@@ -4,8 +4,7 @@ CREATE TABLE binary_contents
     created_at   timestamptz  NOT NULL,
     file_name    varchar(255) NOT NULL,
     size         bigint       NOT NULL,
-    content_type varchar(100) NOT NULL,
-    bytes        bytea        NOT NULL
+    content_type varchar(100) NOT NULL
 );
 
 CREATE TABLE users
@@ -81,10 +80,3 @@ CREATE TABLE message_attachments
     CONSTRAINT fk_message_attachment_binary_content FOREIGN KEY (attachment_id) REFERENCES binary_contents (id)
         ON DELETE CASCADE
 );
-
-SHOW search_path;
-
-SELECT * FROM information_schema.tables
-WHERE table_schema = 'public';
-
-select count(*) from users;

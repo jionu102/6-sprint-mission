@@ -1,9 +1,11 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.dto.data.UserStatusDto;
 import com.sprint.mission.discodeit.dto.request.UserStatusCreateRequest;
 import com.sprint.mission.discodeit.dto.request.UserStatusUpdateRequest;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.mapper.UserStatusMapper;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserStatusService;
@@ -23,10 +25,11 @@ public class BasicUserStatusService implements UserStatusService {
 
     private final UserStatusRepository userStatusRepository;
     private final UserRepository userRepository;
+    private final UserStatusMapper userStatusMapper;
 
     @Transactional
     @Override
-    public UserStatus create(UserStatusCreateRequest request) {
+    public UserStatusDto create(UserStatusCreateRequest request) {
         UUID userId = request.userId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User with id " + userId + " does not exist"));
@@ -37,25 +40,24 @@ public class BasicUserStatusService implements UserStatusService {
 
         Instant lastActiveAt = request.lastActiveAt();
         UserStatus userStatus = new UserStatus(user, lastActiveAt);
-        return userStatusRepository.save(userStatus);
+        return userStatusMapper.toDto(userStatusRepository.save(userStatus));
     }
 
     @Override
-    public UserStatus find(UUID userStatusId) {
-        return userStatusRepository.findById(userStatusId)
+    public UserStatusDto find(UUID userStatusId) {
+        return userStatusMapper.toDto(userStatusRepository.findById(userStatusId)
                 .orElseThrow(
-                        () -> new NoSuchElementException("UserStatus with id " + userStatusId + " not found"));
+                        () -> new NoSuchElementException("UserStatus with id " + userStatusId + " not found")));
     }
 
     @Override
-    public List<UserStatus> findAll() {
-        return userStatusRepository.findAll().stream()
-                .toList();
+    public List<UserStatusDto> findAll() {
+        return userStatusRepository.findAll().stream().map(userStatusMapper::toDto).toList();
     }
 
     @Transactional
     @Override
-    public UserStatus update(UUID userStatusId, UserStatusUpdateRequest request) {
+    public UserStatusDto update(UUID userStatusId, UserStatusUpdateRequest request) {
         Instant newLastActiveAt = request.newLastActiveAt();
 
         UserStatus userStatus = userStatusRepository.findById(userStatusId)
@@ -63,12 +65,12 @@ public class BasicUserStatusService implements UserStatusService {
                         () -> new NoSuchElementException("UserStatus with id " + userStatusId + " not found"));
         userStatus.update(newLastActiveAt);
 
-        return userStatusRepository.save(userStatus);
+        return userStatusMapper.toDto(userStatusRepository.save(userStatus));
     }
 
     @Transactional
     @Override
-    public UserStatus updateByUserId(UUID userId, UserStatusUpdateRequest request) {
+    public UserStatusDto updateByUserId(UUID userId, UserStatusUpdateRequest request) {
         Instant newLastActiveAt = request.newLastActiveAt();
 
         UserStatus userStatus = userStatusRepository.findByUserId(userId)
@@ -76,7 +78,7 @@ public class BasicUserStatusService implements UserStatusService {
                         () -> new NoSuchElementException("UserStatus with userId " + userId + " not found"));
         userStatus.update(newLastActiveAt);
 
-        return userStatusRepository.save(userStatus);
+        return userStatusMapper.toDto(userStatusRepository.save(userStatus));
     }
 
     @Transactional

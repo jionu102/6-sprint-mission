@@ -19,7 +19,7 @@ public interface UserService {
 
   UserDto find(UUID userId);
 
-  PageResponse<UserDto> findAll(Pageable pageable);
+  List<UserDto> findAll();
 
   UserDto update(UUID userId, UserUpdateRequest userUpdateRequest,
       Optional<BinaryContentCreateRequest> profileCreateRequest);

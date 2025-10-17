@@ -9,8 +9,8 @@ import java.util.List;
 @Builder
 public class PageResponse<T> {
     private List<T> content;
-    private int number;
     private int size;
     private boolean hasNext;
     private Long totalElements;
+    private Object nextCursor;
 }
