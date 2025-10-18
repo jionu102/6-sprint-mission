@@ -13,7 +13,7 @@ public class PageResponseMapper<T> {
                 .size(slice.getSize())
                 .hasNext(slice.hasNext())
                 .totalElements((long) slice.getContent().size())
-                .nextCursor(slice.getContent().get(slice.getContent().size() - 1))
+                .nextCursor(slice.getContent().isEmpty() ? null : slice.getContent().get(slice.getContent().size() - 1))
                 .build();
     }
 
@@ -23,7 +23,7 @@ public class PageResponseMapper<T> {
                 .size(page.getSize())
                 .hasNext(page.hasNext())
                 .totalElements(page.getTotalElements())
-                .nextCursor(page.getContent().get(page.getContent().size() - 1))
+                .nextCursor(page.getContent().isEmpty() ? null : page.getContent().get(page.getContent().size() - 1))
                 .build();
     }
 }
