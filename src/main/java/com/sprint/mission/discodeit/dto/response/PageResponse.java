@@ -1,16 +1,13 @@
 package com.sprint.mission.discodeit.dto.response;
 
-import lombok.Builder;
-import lombok.Getter;
-
 import java.util.List;
 
-@Getter
-@Builder
-public class PageResponse<T> {
-    private List<T> content;
-    private int size;
-    private boolean hasNext;
-    private Long totalElements;
-    private Object nextCursor;
+public record PageResponse<T>(
+    List<T> content,
+    Object nextCursor,
+    int size,
+    boolean hasNext,
+    Long totalElements
+) {
+
 }
