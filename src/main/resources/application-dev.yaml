@@ -25,3 +25,35 @@ discodeit:
     type: local
     local:
       root-path: .discodeit/dev/storage
+
+
+info:
+  app:
+    name: Discodeit
+    application-version: 1.7.0
+    java-version: 17
+    spring-boot: 3.4.0
+  datasource:
+    url: jdbc:postgresql://localhost:5432/discodeit
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    ddl-auto: validate
+  storage:
+    type: local
+    path: .discodeit/dev/storage
+  multipart:
+    maxFileSize: 10MB
+    maxRequestSize: 30MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, loggers, info, metrics
+  endpoint:
+    health:
+      show-details: always
+
+  info:
+    env:
+      enabled: true
