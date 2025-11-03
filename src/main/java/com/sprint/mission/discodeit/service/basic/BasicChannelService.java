@@ -7,6 +7,9 @@ import com.sprint.mission.discodeit.dto.request.PublicChannelUpdateRequest;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.ReadStatus;
+import com.sprint.mission.discodeit.exception.ErrorCode;
+import com.sprint.mission.discodeit.exception.channel.ChannelNotFoundException;
+import com.sprint.mission.discodeit.exception.channel.ChannelUpdateException;
 import com.sprint.mission.discodeit.mapper.ChannelMapper;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
@@ -25,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class BasicChannelService implements ChannelService {
 
   private final ChannelRepository channelRepository;
-  //
   private final ReadStatusRepository readStatusRepository;
   private final MessageRepository messageRepository;
   private final UserRepository userRepository;
@@ -62,7 +64,8 @@ public class BasicChannelService implements ChannelService {
     return channelRepository.findById(channelId)
         .map(channelMapper::toDto)
         .orElseThrow(
-            () -> new NoSuchElementException("Channel with id " + channelId + " not found"));
+            () -> new ChannelNotFoundException(ErrorCode.CHANNEL_NOT_FOUND)
+                    .addDetail("channelId", channelId));
   }
 
   @Transactional(readOnly = true)
@@ -86,9 +89,12 @@ public class BasicChannelService implements ChannelService {
     String newDescription = request.newDescription();
     Channel channel = channelRepository.findById(channelId)
         .orElseThrow(
-            () -> new NoSuchElementException("Channel with id " + channelId + " not found"));
+            () -> new ChannelNotFoundException(ErrorCode.CHANNEL_NOT_FOUND)
+                    .addDetail("channelId", channelId));
     if (channel.getType().equals(ChannelType.PRIVATE)) {
-      throw new IllegalArgumentException("Private channel cannot be updated");
+      throw new ChannelUpdateException(ErrorCode.PRIVATE_CHANNEL_CANNOT_UPDATE)
+              .addDetail("channelId", channelId)
+              .addDetail("type", ChannelType.PRIVATE.name());
     }
     channel.update(newName, newDescription);
     return channelMapper.toDto(channel);
@@ -98,7 +104,8 @@ public class BasicChannelService implements ChannelService {
   @Override
   public void delete(UUID channelId) {
     if (!channelRepository.existsById(channelId)) {
-      throw new NoSuchElementException("Channel with id " + channelId + " not found");
+      throw new ChannelNotFoundException(ErrorCode.CHANNEL_NOT_FOUND)
+              .addDetail("channelId", channelId);
     }
 
     messageRepository.deleteAllByChannelId(channelId);
