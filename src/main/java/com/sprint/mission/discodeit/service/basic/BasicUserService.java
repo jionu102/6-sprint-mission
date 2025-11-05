@@ -68,8 +68,8 @@ public class BasicUserService implements UserService {
         Instant now = Instant.now();
         UserStatus userStatus = new UserStatus(user, now);
 
-        userRepository.save(user);
-        return userMapper.toDto(user);
+        User savedUser = userRepository.save(user);
+        return userMapper.toDto(savedUser);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class BasicUserService implements UserService {
     @Transactional
     @Override
     public void delete(UUID userId) {
-        if (userRepository.existsById(userId)) {
+        if (!userRepository.existsById(userId)) {
             throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
                     .addDetail("userId", userId);
         }
