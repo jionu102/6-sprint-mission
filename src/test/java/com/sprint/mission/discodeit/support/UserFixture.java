@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.support;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.entity.base.BaseEntity;
 
 import java.lang.reflect.Field;
@@ -12,6 +13,16 @@ public class UserFixture {
         User user = new User(username, email, password, profile);
         setUserId(user, id);
         return user;
+    }
+
+    public static void setUserStatus(User user, UserStatus userStatus) {
+        try {
+            Field field = User.class.getDeclaredField("status");
+            field.setAccessible(true);
+            field.set(user, userStatus);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static void setUserId(User user, UUID uuid) {

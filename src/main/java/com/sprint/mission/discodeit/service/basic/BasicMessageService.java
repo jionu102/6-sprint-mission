@@ -23,7 +23,6 @@ import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import java.time.Instant;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -82,8 +81,8 @@ public class BasicMessageService implements MessageService {
         attachments
     );
 
-    messageRepository.save(message);
-    return messageMapper.toDto(message);
+    Message savedMessage = messageRepository.save(message);
+    return messageMapper.toDto(savedMessage);
   }
 
   @Transactional(readOnly = true)
