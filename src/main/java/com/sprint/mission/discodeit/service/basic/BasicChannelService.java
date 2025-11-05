@@ -40,22 +40,22 @@ public class BasicChannelService implements ChannelService {
     String description = request.description();
     Channel channel = new Channel(ChannelType.PUBLIC, name, description);
 
-    channelRepository.save(channel);
-    return channelMapper.toDto(channel);
+    Channel savedChannel = channelRepository.save(channel);
+    return channelMapper.toDto(savedChannel);
   }
 
   @Transactional
   @Override
   public ChannelDto create(PrivateChannelCreateRequest request) {
     Channel channel = new Channel(ChannelType.PRIVATE, null, null);
-    channelRepository.save(channel);
+    Channel savedChannel = channelRepository.save(channel);
 
     List<ReadStatus> readStatuses = userRepository.findAllById(request.participantIds()).stream()
-        .map(user -> new ReadStatus(user, channel, channel.getCreatedAt()))
+        .map(user -> new ReadStatus(user, savedChannel, savedChannel.getCreatedAt()))
         .toList();
     readStatusRepository.saveAll(readStatuses);
 
-    return channelMapper.toDto(channel);
+    return channelMapper.toDto(savedChannel);
   }
 
   @Transactional(readOnly = true)
