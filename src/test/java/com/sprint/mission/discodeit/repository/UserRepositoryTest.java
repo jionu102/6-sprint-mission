@@ -32,6 +32,7 @@ public class UserRepositoryTest {
     private final Long FILE_SIZE = 1024L;
     private final String CONTENT_TYPE = "image/jpeg";
 
+    //BeforeEach와 Test는 같은 트랜잭션을 공유한다. (em.clear 시 문제 발생)
     @BeforeEach
     void setUp() {
         userRepository.deleteAll();
