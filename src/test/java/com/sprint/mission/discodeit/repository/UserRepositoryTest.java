@@ -40,7 +40,6 @@ public class UserRepositoryTest {
         User user = new User(USERNAME, USER_EMAIL, PASSWORD, binaryContent);
         UserStatus userStatus = new UserStatus(user, Instant.now());
         userRepository.save(user);
-        userStatusRepository.save(userStatus);
     }
 
     @Test
