@@ -13,7 +13,7 @@ spring:
     open-in-view: false
   profiles:
     active:
-      - dev
+      - ${SPRING_ACTIVE_PROFILE}
 
 management:
   endpoints:
@@ -46,9 +46,15 @@ info:
 
 discodeit:
   storage:
-    type: local
+    type: ${STORAGE_TYPE:local}
     local:
-      root-path: .discodeit/storage
+      root-path: ${STORAGE_LOCAL_ROOT_PATH:.discodeit/storage}
+    s3:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+      region: ${AWS_REGION}
+      bucket: ${AWS_S3_BUCKET}
+      presigned-url-expiration: ${AWS_S3_PRESIGNED_URL_EXPIRATION:600}
 
 logging:
   level:
