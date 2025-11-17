@@ -9,7 +9,7 @@ RUN chmod +x gradlew
 RUN ./gradlew build -x test
 
 #runtime stage
-FROM amazoncorretto:17
+FROM amazoncorretto:17-alpine
 
 WORKDIR /app
 
