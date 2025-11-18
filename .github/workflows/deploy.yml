@@ -3,7 +3,7 @@ name: discodeit-action
 on:
   push:
     branches:
-      - main
+      - release
 
 jobs:
   build-and-push:
