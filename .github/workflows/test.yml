@@ -6,6 +6,26 @@ jobs:
   test-aws-connection:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+
+    - name: Set up JDK
+      uses: actions/setup-java@v5
+      with:
+        java-version: '17'
+        distribution: 'corretto'
+
+    - name: Generate coverage report
+      run: ./gradlew clean test jacocoTestReport
+
+    - name: Upload coverage to CodeCov
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./build/reports/jacoco/test/jacocoTestReport.xml
+        flags: unittests
+        name: codecov-umbrella
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v5
       with:
@@ -17,13 +37,3 @@ jobs:
       run: |
         aws sts get-caller-identity
         aws ecr describe-repositories --repository-names discodeit-ecr
-
-    - name: Generate coverage report
-      run: mvn clean test jacoco:report
-
-    - name: Upload coverage to CodeCov
-      uses: codecov/codecov-action@v3
-      with:
-        files: ./target/site/jacoco/jacoco.xml
-        flags: unittests
-        name: codecov-umbrella
