@@ -1,6 +1,5 @@
 package com.sprint.mission.discodeit.repository;
 
-import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +19,9 @@ public interface ReadStatusRepository extends JpaRepository<ReadStatus, UUID> {
       + "WHERE r.channel.id = :channelId")
   List<ReadStatus> findAllByChannelIdWithUser(@Param("channelId") UUID channelId);
 
-  Optional<ReadStatus> findByChannelIdAndUserId(UUID channelId, UUID userId);
+  List<ReadStatus> findAllByChannelIdAndNotificationEnabledTrue(@Param("channelId") UUID channelId);
 
-  Boolean existsByUserIdAndChannelId(UUID userId, UUID channelId);
+  Optional<ReadStatus> findByUserIdAndChannelId(UUID userId, UUID channelId);
 
   void deleteAllByChannelId(UUID channelId);
-
-    UUID channel(Channel channel);
 }

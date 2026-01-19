@@ -17,8 +17,15 @@ spring:
   config:
     import: optional:file:.env[.properties]
   cache:
+    type: redis
+    cache-names:
+      - channels
+      - notifications
+      - users
     caffeine:
       spec: recordStats
+    redis:
+      enable-statistics: true
   data:
     redis:
       host: ${REDIS_HOST:localhost}
