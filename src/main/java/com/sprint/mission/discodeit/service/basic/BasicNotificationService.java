@@ -10,6 +10,9 @@ import com.sprint.mission.discodeit.service.NotificationService;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import com.sprint.mission.discodeit.service.SseService;
+import com.sprint.mission.discodeit.sse.SseEventNames;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
@@ -29,6 +32,7 @@ public class BasicNotificationService implements NotificationService {
   private final NotificationRepository notificationRepository;
   private final NotificationMapper notificationMapper;
   private final CacheManager cacheManager;
+  private final SseService sseService;
 
   @Cacheable(value = "notifications", key = "#receiverId", unless = "#result.isEmpty()")
   @PreAuthorize("principal.userDto.id == #receiverId")
@@ -75,6 +79,13 @@ public class BasicNotificationService implements NotificationService {
         )).toList();
     notificationRepository.saveAll(notifications);
     evictNotificationCache(receiverIds);
+
+    notifications.forEach(notification ->
+            sseService.send(
+                    List.of(notification.getReceiverId()),
+                    SseEventNames.NOTIFICATIONS_CREATED.getName(), notificationMapper.toDto(notification)
+            )
+    );
     log.info("새 알림 생성 완료: receiverIds={}", receiverIds);
   }
 
